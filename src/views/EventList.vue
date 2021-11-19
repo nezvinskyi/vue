@@ -2,11 +2,11 @@
   <div class="">
     <h1>Events Listing</h1>
     <EventCard />
-    <p>
+    <!-- <p>
       <router-link :to="{ name: 'event-show', params: { id: '1' } }"
         >First Event</router-link
       >
-    </p>
+    </p> -->
   </div>
 </template>
 
