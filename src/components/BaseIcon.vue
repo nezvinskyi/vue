@@ -1,5 +1,8 @@
 <template>
-  <div class="icon-wrapper" v-html="svg"></div>
+  <div>
+    <span class="icon-wrapper" v-html="svg"></span>
+    <span><slot></slot></span>
+  </div>
 </template>
 
 <script>
