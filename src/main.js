@@ -42,7 +42,6 @@ requireComponent.keys().forEach(fileName => {
 
 Vue.config.productionTip = false;
 
-console.log("requireComponent :>> ", requireComponent.keys());
 new Vue({
   router,
   store,
