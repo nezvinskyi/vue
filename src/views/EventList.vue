@@ -1,7 +1,22 @@
 <template>
   <div class="">
-    <h1>Events Listing</h1>
-    <EventCard v-for="event in events" :key="event.id" :event="event" />
+    <h1>Events for {{ user.user.name }}</h1>
+    <EventCard v-for="event in event.events" :key="event.id" :event="event" />
+
+    <router-link
+      v-if="page != 1"
+      :to="{ name: 'event-list', query: { page: page - 1 } }"
+      rel="prev"
+      >PrevPage</router-link
+    >
+    <template v-if="page > 1 && hasNextPage"> | </template>
+
+    <router-link
+      v-if="hasNextPage"
+      :to="{ name: 'event-list', query: { page: page + 1 } }"
+      rel="next"
+      >NextPage</router-link
+    >
     <!-- <BaseButton>Test</BaseButton> -->
     <!-- <p>
       <router-link :to="{ name: 'event-show', params: { id: '1' } }"
@@ -12,28 +27,37 @@
 </template>
 
 <script>
-import axios from "axios";
 import EventCard from "../components/EventCard.vue";
-import EventService from "../services/EventService.js";
-// import BaseButton from "@/components/BaseButton.vue";
+import { mapState } from "vuex";
 export default {
-  data() {
-    return {
-      events: [],
-    };
-  },
   components: {
     EventCard,
     // BaseButton,
   },
   created() {
-    EventService.getEvents()
-      .then(response => {
-        this.events = response.data;
-      })
-      .catch(error => {
-        console.log(`error`, error.response);
-      });
+    this.$store.dispatch("event/fetchEvents", {
+      perPage: this.perPage,
+      page: this.page,
+    });
+    // EventService.getEvents()
+    //   .then(response => {
+    //     this.events = response.data;
+    //   })
+    //   .catch(error => {
+    //     console.log(`error`, error.response);
+    //   });
+  },
+  computed: {
+    page() {
+      return parseInt(this.$route.query.page) || 1;
+    },
+    perPage() {
+      return parseInt(this.$route.query.limit) || 3;
+    },
+    hasNextPage() {
+      return this.event.eventsTotal > this.page * this.perPage;
+    },
+    ...mapState(["event", "user"]),
   },
 };
 </script>
